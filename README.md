@@ -33,12 +33,27 @@ int main() {
 
 ## Assertions
 
-```C
+```
 TEST_ASSERT_TRUE(condition)
 ```
 Evaluates code in condition and fails if it evaluates to false.
 
-```C
+```
+TEST_ASSERT_FALSE(condition)
+```
+Evaluates code in condition and fails if it evaluates to true.
+
+```
 TEST_ASSERT_EQUAL(expected, actual)
 ```
 Compares two integers and fails if they are not equal.
+
+```
+TEST_ASSERT_NULL(pointer)
+```
+Fails if pointer is not NULL.
+
+```
+TEST_ASSERT_NOT_NULL(pointer)
+```
+Fails if pointer is NULL.

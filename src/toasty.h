@@ -46,10 +46,26 @@ static const char* currentTestName = NULL;
     return; \
 }
 
+#define TEST_ASSERT_FALSE(condition) if ((condition)) { \
+    FAIL("Condition is true", __FILE__, __LINE__); \
+    return; \
+}
+
 #define TEST_ASSERT_EQUAL(expected, actual) if ((expected) != (actual)) { \
     char msg[128]; \
     snprintf(msg, sizeof(msg), "Expected %d, but got %d", (int)(expected), (int)(actual)); \
     FAIL(msg, __FILE__, __LINE__); \
+    return; \
+}
+
+#define TEST_ASSERT_NULL(pointer) if ((pointer)) { \
+    FAIL("Pointer is not null", __FILE__, __LINE__); \
+    return; \
+}
+
+#define TEST_ASSERT_NOT_NULL(pointer) if (!(pointer)) { \
+    FAIL("Pointer is null", __FILE__, __LINE__); \
+    return; \
 }
 
 static int RunTests() {
