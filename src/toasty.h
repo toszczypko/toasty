@@ -69,13 +69,15 @@ static size_t toasty__testCount = 0;
 static size_t toasty__testsPassed = 0;
 static size_t toasty__testsFailed = 0;
 static const char* toasty__currentTestName = NULL;
+static const char* toasty__fileName = NULL;
 
 void (*toasty__SetUp)() = NULL;
 void (*toasty__TearDown)() = NULL;
 void SetUp() __attribute__((weak));
 void TearDown() __attribute__((weak));
 
-__attribute__((constructor)) static void toasty__RegisterSetUpAndTearDown() {
+__attribute__((constructor)) static void toasty__Initialize() {
+    toasty__fileName = __FILE__;
     if (SetUp != NULL) toasty__SetUp = SetUp;
     if (TearDown != NULL) toasty__TearDown = TearDown;
 }
@@ -104,7 +106,7 @@ const char* toasty__GetCurrentTestName() {
 }
 
 int RunTests() {
-    printf("\033[1;96mRunning %zu tests...\033[m\n", toasty__testCount);
+    printf("\033[1;96mRunning %zu tests from %s:\033[m\n", toasty__testCount, toasty__fileName);
     for (size_t i = 0; i < toasty__testCount; ++i) {
         if (toasty__SetUp) toasty__SetUp();
 
