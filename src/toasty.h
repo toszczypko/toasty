@@ -12,6 +12,9 @@ typedef struct {
 
 int RunTests();
 
+extern void (*toasty__SetUp)();
+extern void(*toasty__TearDown)();
+
 void toasty__RegisterTest(const char* name, TestFunc func);
 void toasty__IncrementFail();
 const char* toasty__GetCurrentTestName();
@@ -67,6 +70,16 @@ static size_t toasty__testsPassed = 0;
 static size_t toasty__testsFailed = 0;
 static const char* toasty__currentTestName = NULL;
 
+void (*toasty__SetUp)() = NULL;
+void (*toasty__TearDown)() = NULL;
+void SetUp() __attribute__((weak));
+void TearDown() __attribute__((weak));
+
+__attribute__((constructor)) static void toasty__RegisterSetUpAndTearDown() {
+    if (SetUp != NULL) toasty__SetUp = SetUp;
+    if (TearDown != NULL) toasty__TearDown = TearDown;
+}
+
 void toasty__RegisterTest(const char *name, TestFunc func) {
     if (toasty__testCount < MAX_TESTS) {
         toasty__tests[toasty__testCount++] = (TestCase){ name, func };
@@ -93,6 +106,8 @@ const char* toasty__GetCurrentTestName() {
 int RunTests() {
     printf("\033[1;96mRunning %zu tests...\033[m\n", toasty__testCount);
     for (size_t i = 0; i < toasty__testCount; ++i) {
+        if (toasty__SetUp) toasty__SetUp();
+
         toasty__currentTestName = toasty__tests[i].name;
         size_t beforeFailCount = toasty__testsFailed;
         toasty__tests[i].func();
@@ -100,6 +115,8 @@ int RunTests() {
             printf("\033[1;92m[PASS]\033[m %s\n", toasty__currentTestName);
             ++toasty__testsPassed;
         }
+
+        if (toasty__TearDown) toasty__TearDown();
     }
 
     printf("\n\033[1;96m========== TEST SUMMARY ==========\033[m\n");
@@ -108,10 +125,10 @@ int RunTests() {
         toasty__testCount, toasty__testsPassed, toasty__testsFailed
     );
     if (toasty__testsFailed > 0) {
-        printf("\033[1;91mSome tests failed!\033[m\n");
+        printf("\033[1;91mSome tests failed!\033[m\n\n");
         return EXIT_FAILURE;
     } else {
-        printf("\033[1;92mAll tests passed!\033[m\n");
+        printf("\033[1;92mAll tests passed!\033[m\n\n");
         return EXIT_SUCCESS;
     }
 }

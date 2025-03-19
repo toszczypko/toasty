@@ -46,6 +46,31 @@ By default, only 100 tests can be defined. To increase this value, add the macro
 #include "toasty.h"
 ```
 
+### SetUp and TearDown
+
+It is possible to optionally define `SetUp()` and `TearDown()` functions which will be automatically registered and called before and after each test:
+```C
+#define TOASTY_IMPLEMENTATION
+#include "toasty.h"
+#include <stdio.h>
+
+void SetUp() {
+    printf("Before test\n");
+}
+
+void TearDown() {
+    printf("After test\n");
+}
+
+TEST(test_example) {
+    TEST_ASSERT_TRUE(1);
+}
+
+int main() {
+    return RunAll();
+}
+```
+
 ## Assertions
 
 ```
