@@ -8,7 +8,7 @@ TARGET=test-toasty
 all: ${BUILD_DIR}/${TARGET} | ${BUILD_DIR}
 	./$<
 
-${BUILD_DIR}/${TARGET}: tests/test.c | ${BUILD_DIR}
+${BUILD_DIR}/${TARGET}: tests/test.c src/toasty.h | ${BUILD_DIR}
 	${CC} ${INCLUDES} $< -o $@
 
 ${BUILD_DIR}:
