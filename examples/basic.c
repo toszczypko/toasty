@@ -1,3 +1,4 @@
+#define TOASTY_IMPLEMENTATION
 #include "toasty.h"
 
 TEST(test_assertTrueShouldSucceed) {

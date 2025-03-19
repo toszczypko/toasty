@@ -4,8 +4,13 @@ Toasty is a lightweight and minimalistic unit testing framework for C. It provid
 
 ## Getting Started
 
-Toasty is a header-only framework. To use, simply include `toasty.h` in your project:
+Toasty is a stb-style header-only framework. To use it, simply include `toasty.h` in your project:
 ```C
+#include "toasty.h"
+```
+Since `toasty.h` follows the stb-style pattern, you also must define `TOASTY_IMPLEMENTATION` in one source file before including the header to provide the implementation:
+```C
+#define TOASTY_IMPLEMENTATION
 #include "toasty.h"
 ```
 
@@ -15,6 +20,7 @@ Toasty is a header-only framework. To use, simply include `toasty.h` in your pro
 
 Define a test case using the `TEST(name)` macro:
 ```C
+#define TOASTY_IMPLEMENTATION
 #include "toasty.h"
 
 TEST(test_example) {
@@ -24,11 +30,20 @@ TEST(test_example) {
 
 ### Running Tests
 
-Test registration is done automatically when  the test is defined. To execute all tests in file, use the `RunTests()` function:
+Test registration is done automatically when the test is defined. To execute all tests in file, use the `RunTests()` function:
 ```C
 int main() {
     return RunTests();
 }
+```
+
+### Increase Max Tests Number
+
+By default, only 100 tests can be defined. To increase this value, add the macro `#define MAX_TESTS n` before `#include "toasty.h"` in the file with implementation:
+```C
+#define TOASTY_IMPLEMENTATION
+#define MAX_TESTS 200
+#include "toasty.h"
 ```
 
 ## Assertions
