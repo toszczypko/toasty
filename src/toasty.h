@@ -18,6 +18,7 @@ extern void(*toasty__TearDown)();
 void toasty__RegisterTest(const char* name, TestFunc func);
 void toasty__IncrementFail();
 const char* toasty__GetCurrentTestName();
+void toasty__segfaultHandler(int signum);
 
 #define TEST(name) \
     void name(); \
@@ -58,6 +59,8 @@ const char* toasty__GetCurrentTestName();
 
 #ifdef TOASTY_IMPLEMENTATION
 
+#include <setjmp.h>
+#include <signal.h>
 #include <stdlib.h>
 
 #ifndef MAX_TESTS
@@ -70,6 +73,8 @@ static size_t toasty__testsPassed = 0;
 static size_t toasty__testsFailed = 0;
 static const char* toasty__currentTestName = NULL;
 static const char* toasty__fileName = NULL;
+static jmp_buf toasty__jmpBuf;
+static int toasty__segfaultCaught = 0;
 
 void (*toasty__SetUp)() = NULL;
 void (*toasty__TearDown)() = NULL;
@@ -105,14 +110,35 @@ const char* toasty__GetCurrentTestName() {
     return toasty__currentTestName;
 }
 
+void toasty__segfaultHandler(int signum) {
+    (void)signum;
+    printf("\033[1;91m[FAIL]\033[m %s: Caught SEGFAULT!\n", toasty__currentTestName);
+    toasty__segfaultCaught = 1;
+    longjmp(toasty__jmpBuf, 1);
+}
+
 int RunTests() {
     printf("\033[1;96mRunning %zu tests from %s:\033[m\n", toasty__testCount, toasty__fileName);
+    
+    struct sigaction sa;
+    sa.sa_handler = toasty__segfaultHandler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = 0;
+    sigaction(SIGSEGV, &sa, NULL);
+
     for (size_t i = 0; i < toasty__testCount; ++i) {
         if (toasty__SetUp) toasty__SetUp();
 
+        toasty__segfaultCaught = 0;
         toasty__currentTestName = toasty__tests[i].name;
         size_t beforeFailCount = toasty__testsFailed;
-        toasty__tests[i].func();
+
+        if (setjmp(toasty__jmpBuf) == 0) {
+            toasty__tests[i].func();
+        } else {
+            ++toasty__testsFailed;
+        }
+        
         if (beforeFailCount == toasty__testsFailed) {
             printf("\033[1;92m[PASS]\033[m %s\n", toasty__currentTestName);
             ++toasty__testsPassed;
