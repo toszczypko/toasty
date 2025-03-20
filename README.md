@@ -30,7 +30,7 @@ TEST(test_example) {
 
 ### Running Tests
 
-Test registration is done automatically when the test is defined. To execute all tests in file, use the `RunTests()` function:
+Test registration is done automatically when the test is defined. To execute all tests in file, use the `RunTests()` macro:
 ```C
 int main() {
     return RunTests();
@@ -97,3 +97,7 @@ Fails if pointer is not NULL.
 TEST_ASSERT_NOT_NULL(pointer)
 ```
 Fails if pointer is NULL.
+
+## Catch segfaults
+
+Toasty catches segfaults in tests and reports which test has the problem. Tests with segfaults are treated as failed.
