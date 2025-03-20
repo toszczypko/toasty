@@ -8,22 +8,24 @@ typedef void (*TestFunc)();
 typedef struct {
     const char* name;
     TestFunc func;
+    int line;
 } TestCase;
-
-int RunTests();
 
 extern void (*toasty__SetUp)();
 extern void(*toasty__TearDown)();
 
-void toasty__RegisterTest(const char* name, TestFunc func);
+void toasty__RegisterTest(const char* name, TestFunc func, int line);
 void toasty__IncrementFail();
 const char* toasty__GetCurrentTestName();
 void toasty__segfaultHandler(int signum);
+int toasty__RunTests(const char* fileName);
+
+#define RunTests() toasty__RunTests(__FILE__)
 
 #define TEST(name) \
     void name(); \
     __attribute__((constructor)) void register_##name() { \
-        toasty__RegisterTest(#name, name); \
+        toasty__RegisterTest(#name, name, __LINE__); \
     } \
     void name()
 
@@ -73,6 +75,7 @@ static size_t toasty__testsPassed = 0;
 static size_t toasty__testsFailed = 0;
 static const char* toasty__currentTestName = NULL;
 static const char* toasty__fileName = NULL;
+static int toasty__currentTestLine;
 static jmp_buf toasty__jmpBuf;
 static int toasty__segfaultCaught = 0;
 
@@ -82,14 +85,13 @@ void SetUp() __attribute__((weak));
 void TearDown() __attribute__((weak));
 
 __attribute__((constructor)) static void toasty__Initialize() {
-    toasty__fileName = __FILE__;
     if (SetUp != NULL) toasty__SetUp = SetUp;
     if (TearDown != NULL) toasty__TearDown = TearDown;
 }
 
-void toasty__RegisterTest(const char *name, TestFunc func) {
+void toasty__RegisterTest(const char *name, TestFunc func, int line) {
     if (toasty__testCount < MAX_TESTS) {
-        toasty__tests[toasty__testCount++] = (TestCase){ name, func };
+        toasty__tests[toasty__testCount++] = (TestCase){ name, func, line };
     }
     else {
         printf(
@@ -112,12 +114,13 @@ const char* toasty__GetCurrentTestName() {
 
 void toasty__segfaultHandler(int signum) {
     (void)signum;
-    printf("\033[1;91m[FAIL]\033[m %s: Caught SEGFAULT!\n", toasty__currentTestName);
+    printf("\033[1;91m[FAIL]\033[m %s %s:%d Caught segfault in this test\n", toasty__currentTestName, toasty__fileName, toasty__currentTestLine);
     toasty__segfaultCaught = 1;
     longjmp(toasty__jmpBuf, 1);
 }
 
-int RunTests() {
+int toasty__RunTests(const char* fileName) {
+    toasty__fileName = fileName;
     printf("\033[1;96mRunning %zu tests from %s:\033[m\n", toasty__testCount, toasty__fileName);
     
     struct sigaction sa;
@@ -131,6 +134,7 @@ int RunTests() {
 
         toasty__segfaultCaught = 0;
         toasty__currentTestName = toasty__tests[i].name;
+        toasty__currentTestLine = toasty__tests[i].line;
         size_t beforeFailCount = toasty__testsFailed;
 
         if (setjmp(toasty__jmpBuf) == 0) {
