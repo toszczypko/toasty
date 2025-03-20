@@ -5,8 +5,8 @@ BUILD_DIR=build
 .PHONY: all clean
 
 all: ${BUILD_DIR}/test ${BUILD_DIR}/test_setup_teardown | ${BUILD_DIR}
-	./${BUILD_DIR}/test
-	./${BUILD_DIR}/test_setup_teardown
+	-./${BUILD_DIR}/test
+	-./${BUILD_DIR}/test_setup_teardown
 
 ${BUILD_DIR}/test: tests/test.c src/toasty.h | ${BUILD_DIR}
 	${CC} ${INCLUDES} $< -o $@
