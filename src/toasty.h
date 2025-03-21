@@ -16,7 +16,7 @@ extern void(*toasty__TearDown)();
 void toasty__RegisterTest(const char* name, TestFunc func);
 void toasty__IncrementFail();
 const char* toasty__GetCurrentTestName();
-void toasty__segfaultHandler(int signum);
+void toasty__SegfaultHandler(int signum);
 int toasty__RunTests(const char* fileName);
 
 #define RunTests() toasty__RunTests(__FILE__)
@@ -117,7 +117,7 @@ const char* toasty__GetCurrentTestName() {
 }
 
 #ifndef TOASTY_IGNORE_SEGFAULTS
-void toasty__segfaultHandler(int signum) {
+void toasty__SegfaultHandler(int signum) {
     (void)signum;
     printf("\033[1;91m[FAIL]\033[m %s %s: Caught SEGFAULT!\n", toasty__currentTestName, toasty__fileName);
     toasty__segfaultCaught = 1;
@@ -131,7 +131,7 @@ int toasty__RunTests(const char* fileName) {
     
 #ifndef TOASTY_IGNORE_SEGFAULTS
     struct sigaction sa;
-    sa.sa_handler = toasty__segfaultHandler;
+    sa.sa_handler = toasty__SegfaultHandler;
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
     sigaction(SIGSEGV, &sa, NULL);
