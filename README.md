@@ -106,3 +106,12 @@ Fails if pointer is not NULL.
 TEST_ASSERT_NOT_NULL(pointer)
 ```
 Fails if pointer is NULL.
+
+```
+TEST_ASSERT_EQUAL_INT(expected, actual);
+TEST_ASSERT_EQUAL_INT8(expected, actual);
+TEST_ASSERT_EQUAL_INT16(expected, actual);
+TEST_ASSERT_EQUAL_INT32(expected, actual);
+TEST_ASSERT_EQUAL_INT64(expected, actual);
+```
+Compare two integers and fails if they are not equal. Each of these assertions casts `expected` and `actual` expressions to the specified type of exact size.

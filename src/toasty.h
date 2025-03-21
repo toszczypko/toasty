@@ -1,6 +1,7 @@
 #ifndef TOASTY_H
 #define TOASTY_H
 
+#include <stdint.h>
 #include <stdio.h>
 
 typedef void (*TestFunc)();
@@ -55,6 +56,51 @@ int toasty__RunTests(const char* fileName);
 #define TEST_ASSERT_NOT_NULL(pointer) if (!(pointer)) { \
     FAIL("Pointer is null", __FILE__, __LINE__); \
 }
+
+#define TEST_ASSERT_EQUAL_INT(expected, actual) do { \
+    int expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %d, but got %d", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_INT8(expected, actual) do { \
+    int8_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %d, but got %d", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_INT16(expected, actual) do { \
+    int16_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %hd, but got %hd", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_INT32(expected, actual) do { \
+    int32_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %d, but got %d", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_INT64(expected, actual) do { \
+    int64_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %ld, but got %ld", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
 
 #endif // TOASTY_H
 
