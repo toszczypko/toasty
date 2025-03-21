@@ -71,6 +71,15 @@ int main() {
 }
 ```
 
+### Handling segfaults
+
+By default, Toasty catches segfaults in tests and reports them as fails. To disable this behavior (e.g. for debugging), simply add the macro `#define TOASTY_IGNORE_SEGFAULTS` before `#include "toasty.h"` in the file with implementation:
+```C
+#define TOASTY_IMPLEMENTATION
+#define TOASTY_IGNORE_SEGFAULTS
+#include "toasty.h"
+```
+
 ## Assertions
 
 ```
@@ -97,7 +106,3 @@ Fails if pointer is not NULL.
 TEST_ASSERT_NOT_NULL(pointer)
 ```
 Fails if pointer is NULL.
-
-## Catch segfaults
-
-Toasty catches segfaults in tests and reports which test has the problem. Tests with segfaults are treated as failed.
