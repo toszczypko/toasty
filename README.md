@@ -39,10 +39,10 @@ int main() {
 
 ### Increase Max Tests Number
 
-By default, only 100 tests can be defined. To increase this value, add the macro `#define MAX_TESTS n` before `#include "toasty.h"` in the file with implementation:
+By default, only 100 tests can be defined. To increase this value, add the macro `#define TOASTY_MAX_TESTS n` before `#include "toasty.h"` in the file with implementation:
 ```C
 #define TOASTY_IMPLEMENTATION
-#define MAX_TESTS 200
+#define TOASTY_MAX_TESTS 200
 #include "toasty.h"
 ```
 

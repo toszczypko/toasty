@@ -66,11 +66,11 @@ int toasty__RunTests(const char* fileName);
 #endif // TOASTY_IGNORE_SEGFAULTS
 #include <stdlib.h>
 
-#ifndef MAX_TESTS
-#define MAX_TESTS 100
-#endif // MAX_TESTS
+#ifndef TOASTY_MAX_TESTS
+#define TOASTY_MAX_TESTS 100
+#endif // TOASTY_MAX_TESTS
 
-static TestCase toasty__tests[MAX_TESTS];
+static TestCase toasty__tests[TOASTY_MAX_TESTS];
 static size_t toasty__testCount = 0;
 static size_t toasty__testsPassed = 0;
 static size_t toasty__testsFailed = 0;
@@ -94,14 +94,14 @@ __attribute__((constructor)) static void toasty__Initialize() {
 }
 
 void toasty__RegisterTest(const char *name, TestFunc func) {
-    if (toasty__testCount < MAX_TESTS) {
+    if (toasty__testCount < TOASTY_MAX_TESTS) {
         toasty__tests[toasty__testCount++] = (TestCase){ name, func };
     }
     else {
         printf(
             "Max number of tests exceeded. (current amount: %zu)\n" \
             "Increase the max number using the following macro in the file with implementation:\n" \
-            "#define MAX_TESTS n\n", \
+            "#define TOASTY_MAX_TESTS n\n", \
             toasty__testCount \
         );
         exit(EXIT_FAILURE);
