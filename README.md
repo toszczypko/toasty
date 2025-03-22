@@ -114,7 +114,7 @@ TEST_ASSERT_EQUAL_INT16(expected, actual);
 TEST_ASSERT_EQUAL_INT32(expected, actual);
 TEST_ASSERT_EQUAL_INT64(expected, actual);
 ```
-Compare two integers and fails if they are not equal. Each of these assertions casts `expected` and `actual` expressions to the specified type of exact size.
+Compares two integers and fails if they are not equal. Each of these assertions casts `expected` and `actual` expressions to the specified type of exact size.
 
 ```
 TEST_ASSERT_EQUAL_UINT(expected, actual);
@@ -123,4 +123,14 @@ TEST_ASSERT_EQUAL_UINT16(expected, actual);
 TEST_ASSERT_EQUAL_UINT32(expected, actual);
 TEST_ASSERT_EQUAL_UINT64(expected, actual);
 ```
-Compare two unsigned integers and fails if they are not equal. Each of these assertions casts `expected` and `actual` expressions to the specified type of exact size.
+Same as `_INT*` tests, but cast values to unsigned integers and compares them.
+
+```
+TEST_ASSERT_EQUAL_HEX(expected, actual);
+TEST_ASSERT_EQUAL_HEX8(expected, actual);
+TEST_ASSERT_EQUAL_HEX16(expected, actual);
+TEST_ASSERT_EQUAL_HEX32(expected, actual);
+TEST_ASSERT_EQUAL_HEX64(expected, actual);
+```
+Same as `_UINT*` tests, but print failures as hexadecimal numbers.
+

@@ -147,6 +147,55 @@ int toasty__RunTests(const char* fileName);
     } \
 } while (0)
 
+#define TEST_ASSERT_EQUAL_HEX(expected, actual) do { \
+    unsigned int expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected 0x%08X, but got 0x%08X", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_HEX8(expected, actual) do { \
+    uint8_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected 0x%02X, but got 0x%02X", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_HEX16(expected, actual) do { \
+    uint16_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected 0x%04X, but got 0x%04X", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_HEX32(expected, actual) do { \
+    uint32_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected 0x%08X, but got 0x%08X", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_HEX64(expected, actual) do { \
+    uint64_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf( \
+            msg, sizeof(msg), "Expected 0x%08X%08X, but got 0x%08X%08X", \
+            (uint32_t)(expected_ >> 32), (uint32_t)(expected_ & 0xFFFFFFFF), \
+            (uint32_t)(actual_ >> 32), (uint32_t)(actual_ & 0xFFFFFFFF) \
+        ); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
 #endif // TOASTY_H
 
 #ifdef TOASTY_IMPLEMENTATION
