@@ -21,6 +21,26 @@ TEST(test_EqualInt64s) {
     TEST_ASSERT_EQUAL_INT64(9223372036854775800, 9223372036854775807 - 7);
 }
 
+TEST(test_EqualUnsignedInts) {
+    TEST_ASSERT_EQUAL_UINT(20000, 5000 + 15000);
+}
+
+TEST(test_EqualUnsignedInt8s) {
+    TEST_ASSERT_EQUAL_UINT8(140, 100 + 40);
+}
+
+TEST(test_EqualUnsignedInt16s) {
+    TEST_ASSERT_EQUAL_UINT16(60000, 30000 + 30000);
+}
+
+TEST(test_EqualUnsignedInt32s) {
+    TEST_ASSERT_EQUAL_UINT32(2147484000, 2147483999 + 1);
+}
+
+TEST(test_EqualUnsignedInt64s) {
+    TEST_ASSERT_EQUAL_UINT64(18446744073709551615u, 18446744073709551614u + 1);
+}
+
 int main() {
     return RunTests();
 }

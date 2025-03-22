@@ -102,6 +102,51 @@ int toasty__RunTests(const char* fileName);
     } \
 } while (0)
 
+#define TEST_ASSERT_EQUAL_UINT(expected, actual) do { \
+    unsigned int expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %u, but got %u", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_UINT8(expected, actual) do { \
+    uint8_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %u, but got %u", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_UINT16(expected, actual) do { \
+    uint16_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %hu, but got %hu", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_UINT32(expected, actual) do { \
+    uint32_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %u, but got %u", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_UINT64(expected, actual) do { \
+    uint64_t expected_ = (expected), actual_ = (actual); \
+    if (expected_ != actual_) { \
+        char msg[128]; \
+        snprintf(msg, sizeof(msg), "Expected %lu, but got %lu", expected_, actual_); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
 #endif // TOASTY_H
 
 #ifdef TOASTY_IMPLEMENTATION
