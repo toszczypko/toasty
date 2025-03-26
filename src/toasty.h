@@ -302,7 +302,7 @@ int toasty__RunTests(const char* fileName) {
         if (toasty__TearDown) toasty__TearDown();
     }
 
-    printf("\n\033[1;96m========== TEST SUMMARY ==========\033[m\n");
+    printf("\033[1;96m========== TEST SUMMARY ==========\033[m\n");
     printf(
         "\033[1mTotal:\033[m %zu | \033[1mPassed:\033[m %zu | \033[1mFailed:\033[m %zu\n",
         toasty__testCount, toasty__testsPassed, toasty__testsFailed

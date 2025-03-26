@@ -1,14 +1,25 @@
 CC=gcc
+CFLAGS=-O2
 INCLUDES=-Isrc
 BUILD_DIR=build
 
-.PHONY: all clean
+.PHONY: test clean
 
-all: ${BUILD_DIR}/test ${BUILD_DIR}/test_setup_teardown ${BUILD_DIR}/test_int | ${BUILD_DIR}
+${BUILD_DIR}/libtoasty.a: ${BUILD_DIR}/toasty.o | ${BUILD_DIR}
+	ar rcs $@ $<
+
+${BUILD_DIR}/toasty.o: src/toasty.h | ${BUILD_DIR}
+	rm -f ${BUILD_DIR}/toasty.c
+	touch ${BUILD_DIR}/toasty.c
+	echo "#define TOASTY_IMPLEMENTATION" >> ${BUILD_DIR}/toasty.c
+	echo "#include \"toasty.h\"" >> ${BUILD_DIR}/toasty.c
+	${CC} ${CFLAGS} ${INCLUDES} -c ${BUILD_DIR}/toasty.c -o $@
+	rm -f ${BUILD_DIR}/toasty.c
+
+test: ${BUILD_DIR}/test ${BUILD_DIR}/test_setup_teardown ${BUILD_DIR}/test_int | ${BUILD_DIR}
 	-./${BUILD_DIR}/test
 	-./${BUILD_DIR}/test_setup_teardown
 	-./${BUILD_DIR}/test_int
-
 
 ${BUILD_DIR}/test: tests/test.c src/toasty.h | ${BUILD_DIR}
 	${CC} ${INCLUDES} $< -o $@

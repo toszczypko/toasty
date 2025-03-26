@@ -14,6 +14,8 @@ Since `toasty.h` follows the stb-style pattern, you also must define `TOASTY_IMP
 #include "toasty.h"
 ```
 
+Alternatively, you can compile `toasty` as a static library which can be linked. To compile, call `make` and link created library. With this method, `TOASTY_IMPLEMENTATION` is not needed.
+
 ## Usage
 
 ### Defining Tests
