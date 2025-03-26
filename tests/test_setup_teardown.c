@@ -1,4 +1,3 @@
-#define TOASTY_IMPLEMENTATION
 #include "toasty.h"
 #include <stdlib.h>
 
