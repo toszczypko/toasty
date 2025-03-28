@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 typedef void (*TestFunc)();
 
@@ -19,6 +20,11 @@ void toasty__IncrementFail();
 const char* toasty__GetCurrentTestName();
 void toasty__SegfaultHandler(int signum);
 int toasty__RunTests(const char* fileName);
+float toasty__AbsFloat(float x);
+double toasty__AbsDouble(double x);
+
+#define TOASTY_EPS_FLOAT 1e-6f
+#define TOASTY_EPS_DOUBLE 1e-9
 
 #define RunTests() toasty__RunTests(__FILE__)
 
@@ -196,6 +202,22 @@ int toasty__RunTests(const char* fileName);
     } \
 } while (0)
 
+#define TEST_ASSERT_EQUAL_FLOAT(expected, actual) do { \
+    if (toasty__AbsFloat((expected) - (actual)) > TOASTY_EPS_FLOAT) { \
+        char msg[64]; \
+        snprintf(msg, sizeof(msg), "Expected %.6f, but got %.6f", expected, actual); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
+#define TEST_ASSERT_EQUAL_DOUBLE(expected, actual) do { \
+    if (toasty__AbsDouble((expected) - (actual)) > TOASTY_EPS_DOUBLE) { \
+        char msg[64]; \
+        snprintf(msg, sizeof(msg), "Expected %.9lf, but got %.9lf", expected, actual); \
+        FAIL(msg, __FILE__, __LINE__); \
+    } \
+} while (0)
+
 #endif // TOASTY_H
 
 #ifdef TOASTY_IMPLEMENTATION
@@ -204,7 +226,6 @@ int toasty__RunTests(const char* fileName);
 #include <setjmp.h>
 #include <signal.h>
 #endif // TOASTY_IGNORE_SEGFAULTS
-#include <stdlib.h>
 
 #ifndef TOASTY_MAX_TESTS
 #define TOASTY_MAX_TESTS 100
@@ -314,6 +335,14 @@ int toasty__RunTests(const char* fileName) {
         printf("\033[1;92mAll tests passed!\033[m\n\n");
         return EXIT_SUCCESS;
     }
+}
+
+float toasty__AbsFloat(float x) {
+    return x > 0.f ? x : -x;
+}
+
+double toasty__AbsDouble(double x) {
+    return x > 0.0 ? x : -x;
 }
 
 #endif // TOASTY_IMPLEMENTATION
