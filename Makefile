@@ -19,10 +19,10 @@ ${BUILD_DIR}/toasty.o: src/toasty.h | ${BUILD_DIR}
 	rm -f ${BUILD_DIR}/toasty.c
 
 test: ${BUILD_DIR}/test ${BUILD_DIR}/test_setup_teardown ${BUILD_DIR}/test_int ${BUILD_DIR}/test_float | ${BUILD_DIR}
-	-./${BUILD_DIR}/test
-	-./${BUILD_DIR}/test_setup_teardown
-	-./${BUILD_DIR}/test_int
-	-./${BUILD_DIR}/test_float
+	./${BUILD_DIR}/test
+	./${BUILD_DIR}/test_setup_teardown
+	./${BUILD_DIR}/test_int
+	./${BUILD_DIR}/test_float
 
 ${BUILD_DIR}/test: tests/test.c src/toasty.h ${LIB_FILE} | ${BUILD_DIR}
 	${CC} ${INCLUDES} $< -o $@ ${LIBS}
