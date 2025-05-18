@@ -11,12 +11,7 @@ ${LIB_FILE}: ${BUILD_DIR}/toasty.o | ${BUILD_DIR}
 	ar rcs $@ $<
 
 ${BUILD_DIR}/toasty.o: src/toasty.h | ${BUILD_DIR}
-	rm -f ${BUILD_DIR}/toasty.c
-	touch ${BUILD_DIR}/toasty.c
-	echo "#define TOASTY_IMPLEMENTATION" >> ${BUILD_DIR}/toasty.c
-	echo "#include \"toasty.h\"" >> ${BUILD_DIR}/toasty.c
-	${CC} ${CFLAGS} ${INCLUDES} -c ${BUILD_DIR}/toasty.c -o $@
-	rm -f ${BUILD_DIR}/toasty.c
+	${CC} ${CFLAGS} -x c ${INCLUDES} -DTOASTY_IMPLEMENTATION -c src/toasty.h -o $@
 
 test: ${BUILD_DIR}/test ${BUILD_DIR}/test_setup_teardown ${BUILD_DIR}/test_int ${BUILD_DIR}/test_float | ${BUILD_DIR}
 	./${BUILD_DIR}/test
