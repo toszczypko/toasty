@@ -1,0 +1,34 @@
+name: Build Lib
+
+on:
+  push:
+    branches: [ "ino_dev" ]
+  pull_request:
+    branches: [ "ino_dev" ]
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: "Build"
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build with make
+      run: make
+
+    - name: Create output dir
+      run: mkdir -p dist && cp build/libtoasty.a dist/ && cp src/toasty.h dist/
+
+    - name: Archive artifact
+      run: zip -j dist/toasty.zip dist/libtoasty.a dist/toasty.h
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: toasty
+        path: dist/toasty.zip
